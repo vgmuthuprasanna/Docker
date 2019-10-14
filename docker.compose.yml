@@ -1,0 +1,33 @@
+version: '3'
+services:
+ # Define the myjavaproject web application
+ Docker:
+
+   # Build the Dockerfile that is in the RevString directory
+   build:
+       context: ./RevString/src/RevString.java
+       dockerfile: mydockerFile
+
+   # Always restart the container regardless of the exit status; try and restart the container indefinitely
+   restart: always
+
+   # Expose port 8000 to other containers (not to the host of the machine)
+   expose:
+     - "8000"
+
+   # Mount the web directory within the container at /home/prasanna/myjavaproject/RevString
+   volumes:
+     - ./Docker/RevString:/Docker/RevString 
+
+   # Pass environment variables to the myjavaproject container (this debug level lets you see more useful information)
+   environment:
+     MYJAVAPROJECT_DEBUG: 1
+
+   # Deploy with three replicas in the case one of the containers fails (only in Docker Swarm)
+   deploy:
+     mode: replicated
+     replicas: 3
+
+   # Expose port 5432 to other Docker containers
+   expose:
+     - "5432"
